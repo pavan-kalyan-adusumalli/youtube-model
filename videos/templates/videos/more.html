@@ -1,0 +1,63 @@
+{% extends 'videos/layout.html'%}
+{%block title%}Youtube | {{category}}{%endblock%}
+
+{%block body%}
+        
+    {% if category == 'music'%}
+    <div class="more"><i class="fa fa-{{category}}"></i>  {{category}}</div>
+    {%endif%}
+
+    {% if category == 'science and technology'%}
+    <div class="more"><i class="fa fa-desktop"></i>  {{category}}</div>
+    {%endif%}
+    
+    {% if category == 'gaming'%}
+    <div class="more"><i class="fa fa-gamepad"></i>  {{category}}</div>
+    {%endif%}
+
+    {% if category == 'films and animation'%}
+    <div class="more"><i class="fa fa-film"></i>  {{category}} </div>
+    {%endif%}
+
+    {% if category == 'news'%}
+    <div class="more"><i class="fa fa-newspaper-o"></i>  {{category}} </div>
+    {%endif%}
+
+    <div id="videos">
+        <div id="container">
+            {% for video in videos %}
+                <div class="video" style="display: inline-block;">
+                    <a href="{% url 'watch' video.id %}">
+                    <img class="thumbnail" src="{{video.thumbnail.url}}" alt="thumbnail">
+                    </a><br>
+                    <a href="{% url 'channel' video.uploadedchannel.id %}">
+                        <img class="profilepic" src="{{video.uploadedchannel.channelpicture.url}}" alt="video">
+                    </a><!--
+                    --><a href="{% url 'watch' video.id %}">
+                    <div class="details">
+                        <b>{{video.videoname}}</b><br>
+                        <p>{{video.uploadedchannel.channelname}}</p>
+                        <p>{{video.views}} views</p>
+                    </div></a>
+                    
+                    <span style="float: right; position:absolute; margin-right:20px; width:15px; text-align:center;">
+                        
+                        <div class="dropdown">
+                            <i type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </i>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {%if request.user.is_authenticated %}
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                                {%endif%}
+                            </div>
+                        </div>
+                    
+                    </span>
+                </div>
+            {%endfor%}
+        </div>
+    </div>
+
+{%endblock%}

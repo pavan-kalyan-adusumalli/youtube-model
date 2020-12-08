@@ -1,0 +1,232 @@
+{% extends 'videos/layout.html' %}
+
+{% block title %}YouTube{%endblock%}
+{%block head%}
+<style>
+    #id_uploadedchannel{
+        width: 20px;
+        float: right;
+    }
+    #id_hideComments{
+        margin-left: 50px;
+        display: inline-block;
+    }
+    #id_description{
+        height: 190px;
+        width: 85%;
+    }
+    #id_thumbnail, #id_subtitles{
+        display: inline-block;
+        font-size: 10px;
+    }
+    #id_category{
+        display: inline-block;
+    }
+    label{
+        margin: 20px 0 0 20px;
+    }
+    #id_recording{
+        margin: 20px auto 0 40%;
+    }
+    #text > #addVideo1stoverlay > h5{
+        display: none;
+    }
+    #text > #addVideo1stoverlay > .close{
+        float: right;
+        margin: 5px 8px 0 0;
+    }
+    #overlay4 > #text > div > .form-control, #overlay4 > #text > div > b{
+        margin-left: 20px;
+    }
+    #id_videoname{
+        width: 50%;
+    }
+    @media(max-width: 550px){
+        #id_recording{
+            font-size: 8px;
+        }
+        #text > #addVideo1stoverlay > h4{
+            display: none;
+        }
+        #text > #addVideo1stoverlay > h5{
+            display: block;
+        }
+    }
+    
+</style>
+{%verbatim%}
+<script id="opt" type="text/x-handlebars-template">
+    <option value="{{playlistid}}">{{playlistname}}</option>
+</script>
+{%endverbatim%}
+{%endblock%}
+{%block body%}
+<div style="background-color: rgb(241, 240, 240); margin-top:20px;">
+    {% if user.is_authenticated%}
+    <div style="width: fit-content; margin:0 auto; text-align:center; padding:10%">
+        
+        <img src="../../static/novideos.jpeg" alt="NoVideos">
+        <h3>Upload a video here</h3>
+        <p><small>Start showing your story and connecting with viewers.</small></p>
+        <button id="uploadVideo" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">UPLOAD VIDEO</button> <br>
+        <small style="display:inline-block; margin-top: 10px;">Learn more about <a href="">how to get started</a></small>
+    </div>
+    <!--Overlay for adding videos-->
+<form action="{% url 'uploadvideo' %}" method="POST" enctype="multipart/form-data">
+    {%csrf_token%}
+    <div id="overlay3"><div id="anim">Playlist Created successfully!</div>
+        <div id="text" style="width: 65%;"><!--override some properties of #text-->
+            <div id="addVideo1stoverlay" style="background-color:white; color:black; height:500px; overflow-y:auto; border-radius:5px; text-align:center">
+                <button class="btn btn-light close" onclick="off(3)"><i class="fa fa-times"></i></button>
+                
+                <img src="../../static/Screenshot (510).png" alt="upload video" width="40%" style="margin-top: 90px;">
+                <h4>Upload your Video here</h4>
+                <h5>Upload your Video here</h5>
+                {{videoform.recording}}
+                <button id='next' class="btn btn-light" style="margin-top: 30px; background-color:#337ab7; color:white;" onclick="on(4)">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay4">
+        <div id="text" style="width: 65%;"><!--override some properties of #text-->
+            <div style="background-color:white; color:black; height:500px; overflow-y:auto; border-radius:5px;">
+                <p id="videotitle" style="float: left; font-size:18px; font-weight:bold; margin:10px 0 0 10px;"></p>
+                <button class="btn btn-light close" style="margin: 10px 10px 0 0;" onclick="offall(4)"><i class="fa fa-times"></i></button>
+                <br>
+                <hr>
+                <img style="float: right; margin-right:10%; border-radius:50%;" src="{{extradata.picture}}" alt="" width="7%">
+                
+                <h4 style="margin-left: 20px;"><b>Details</b></h4>
+                {{videoform.uploadedchannel}}
+                <b>Title</b> <br>
+                {{videoform.videoname}} 
+                    
+                    <span></span>
+                
+                <label style="margin-top: 30px;" for="description">Description</label>
+                {{videoform.description}}
+                <label for="thumbnail">Thumbnail</label> &nbsp;&nbsp;{{videoform.thumbnail}}
+                <p style="margin-left: 50px; width:60%;"><small>Upload a picture that shows what's in your video. A good thumbnail stands out and draws viewers' attention. <a href="https://support.google.com/youtube/answer/72431?hl=en-GB" target="_blank">Learn more.</a>
+                </small></p>
+
+
+                <label for="playlists">Playlists</label> &nbsp;
+                <div name='playlists' style="display: inline-block;">
+                    <select name="playlist" id="playlistlist">
+                        {% for playlist in playlists%}
+                            <option value={{playlist.id}}>{{playlist.playlistname}}</option>
+                        {% empty %}
+                            <option id="noplaylists" value="no" disabled>You have no playlists to choose</option>
+                        {%endfor%}
+                    </select>
+                    
+                    &nbsp;&nbsp;
+                    <div class="dropdown" style="float:right; vertical-align:top;">
+                        <button style="display: inline-block; color:#337ab7;" class="btn btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          NEW PLAYLIST
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <input id="playlistname" style="margin: 5px; width:80%;" class="form-control" type="text" class="dropdown-item" placeholder="Enter Playlist name">
+                          <div style="margin-top: 5px;" class="dropdown-item">Private&nbsp;&nbsp;<input id="cbox" type="checkbox"></div>
+                          <button onclick="createNewPlaylist()" id="createPlaylist" class="btn btn-light dropdown-item" style="color: #337ab7; width:50%; margin-left:45%;">CREATE</button>
+                        </div>
+                      </div>
+                </div>
+                
+                <p style="margin-left: 50px; width:60%;"><small>Add your video to one or more playlists. Playlists can help viewers to discover your content faster. <a href="https://support.google.com/youtube/answer/72431?hl=en-GB" target="_blank">Learn more.</a>
+                </small></p>
+
+
+                <label for="category">Category</label>&nbsp;&nbsp;{{videoform.category}}
+                <p style="margin-left: 50px;"><small>Add your video to a category so that viewers can find it more easily.</small></p>
+
+                <label for="thumbnail">Subtitles/CC</label> &nbsp;&nbsp;{{videoform.subtitles}}
+                <p style="margin-left: 50px; width:60%;"><small>Provide subtitles so that people can understand your video well. <a href="https://support.google.com/youtube/answer/72431?hl=en-GB" target="_blank">Learn more.</a>
+                </small></p>
+
+                <label for="thumbnail">Comments</label> 
+                <p style="margin-left: 50px; width:60%;"><small>Choose if and how you want to hide all comments. By default all comments are visible. <a href="https://support.google.com/youtube/answer/72431?hl=en-GB" target="_blank">Learn more.</a>
+                </small></p>
+                {{videoform.hideComments}} <p style="display:inline-block; font-weight: bold;">Hide all comments</p>
+                <p id="channelinfo" style="width: fit-content; margin:none; float:right; font-size:4px; color:white;">{{channel.id}}</p>
+                <br>
+                <button type="submit" id="uploadbtn" class="btn btn-info" style="background-color:#337ab7; float: right; margin:0 20px 20px 0">Upload</button>
+            </div>
+        </div>
+    </div>
+</form>
+    {%else%}
+    <div style="text-align: center; margin:10% auto 0 auto; width:fit-content;">
+        <span style="font-size:90px;" class="fa fa-history"></span>
+        <h3>Keep track of what you watch</h3>
+        <small>Watch history isn't viewable when you're signed out.</small><br><br>
+        <a href="#"><button class="btn btn-info"><span class="fa fa-user-circle-o"></span>&nbsp;&nbsp;sign in</button></a>
+    </div>
+    {%endif%}
+
+    <script>
+        function createNewPlaylist(){
+            const playlistname = document.querySelector('#playlistname').value;
+            const cbox = document.querySelector('#cbox').checked;
+            const channelid = document.querySelector('#id_uploadedchannel').value;
+            fetch(`/createplaylist?name=${playlistname}&cbox=${cbox}&channelid=${channelid}`)
+            .then(response => response.json())
+            .then(data =>{
+                if(data.playlist == 'loggedout')
+                    window.location.replace("/");
+                else if(data.playlist == 'true'){
+                    //document.querySelector('#playlistlist').remove('no');
+                    const opttemplate = Handlebars.compile(document.querySelector('#opt').innerHTML);
+                    document.querySelector('#playlistlist').innerHTML += opttemplate({'playlistid':data.playlistid, 'playlistname':playlistname});
+                    document.querySelector('#anim').style.animationPlayState = 'running';
+                }
+
+            })
+        }
+        document.addEventListener('DOMContentLoaded', ()=>{
+            
+            const channelinfo = document.querySelector('#channelinfo').innerHTML;
+            document.querySelector('#id_uploadedchannel').value = channelinfo;
+            //playlist input field
+            document.querySelector('#createPlaylist').disabled = true;
+            document.querySelector('#playlistname').onkeyup = ()=>{
+                if(document.querySelector('#playlistname').value =='')
+                    document.querySelector('#createPlaylist').disabled = true;
+                else
+                    document.querySelector('#createPlaylist').disabled = false;
+            }
+            //document.querySelector('#createPlaylist').onclick = ()=>{
+            //    document.querySelector('#anim').style.animationPlayState = 'running';
+            //}
+            //upload btn on overlay4
+            document.querySelector('#uploadbtn').disabled = true;
+            document.addEventListener('keyup',()=>{
+                if(document.querySelector('#id_videoname').value =='' || document.querySelector('#id_description').value=='')
+                    document.querySelector('#uploadbtn').disabled = true;
+                else
+                    document.querySelector('#uploadbtn').disabled = false;
+            })//end of upload btn
+
+            //next button on overlay3
+            document.querySelector('#next').disabled = true;
+            document.querySelector('#id_recording').onchange = ()=>{
+                document.querySelector('#next').disabled = false;
+            }//end of next btn
+
+            //overlay
+            document.querySelector('#overlay3').style.display = 'block';
+
+            //videotitle
+            //first make the video title as untitled
+            document.querySelector('#id_videoname').value = "Untitled";
+            document.querySelector('#videotitle').innerHTML = 'Untitled';
+
+            document.querySelector('#id_videoname').onkeyup = ()=>{
+                document.querySelector('#videotitle').innerHTML = document.querySelector('#id_videoname').value;
+            }
+            //end of videotitle
+        })
+    </script>
+</div>
+{%endblock%}

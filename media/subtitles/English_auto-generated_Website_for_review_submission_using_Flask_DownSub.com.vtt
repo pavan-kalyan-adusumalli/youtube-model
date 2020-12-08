@@ -1,0 +1,242 @@
+WEBVTT
+
+1
+00:00:00.030 --> 00:00:02.790
+this absurd is made with flasks we are
+
+2
+00:00:02.790 --> 00:00:04.859
+these are all in environment variables
+
+3
+00:00:04.859 --> 00:00:08.580
+and we have said all of them now let us
+
+4
+00:00:08.580 --> 00:00:12.150
+turn our flask application using flask
+
+5
+00:00:12.150 --> 00:00:15.480
+one comment I can show you our flask
+
+6
+00:00:15.480 --> 00:00:18.900
+application is running on this IP
+
+7
+00:00:18.900 --> 00:00:23.900
+address let us go to the uncross it in
+
+8
+00:00:23.900 --> 00:00:29.070
+browser this is the speed the time zone
+
+9
+00:00:29.070 --> 00:00:32.610
+so this is your login form so since we
+
+10
+00:00:32.610 --> 00:00:35.750
+don't have an account let us create one
+
+11
+00:00:35.750 --> 00:00:39.690
+since username should have contain at
+
+12
+00:00:39.690 --> 00:00:41.489
+least by characters let's just beyond
+
+13
+00:00:41.489 --> 00:00:50.489
+username 1 2 3 that if this account
+
+14
+00:00:50.489 --> 00:00:53.219
+will be created or not since we have
+
+15
+00:00:53.219 --> 00:00:55.370
+given wrong details
+
+16
+00:00:55.370 --> 00:01:01.770
+you take them so yes it is not creating
+
+17
+00:01:01.770 --> 00:01:07.850
+so let us queue the name is 1 2 3 & 4
+
+18
+00:01:15.420 --> 00:01:20.080
+so let us again create the since we have
+
+19
+00:01:20.080 --> 00:01:22.600
+typed wrong password passwords could not
+
+20
+00:01:22.600 --> 00:01:25.270
+match so it is properly working now let
+
+21
+00:01:25.270 --> 00:01:29.010
+us give the right passwords here
+
+22
+00:01:31.520 --> 00:01:35.930
+so now this has to create any conference
+
+23
+00:01:35.930 --> 00:01:38.149
+since we have satisfied all the
+
+24
+00:01:38.149 --> 00:01:40.070
+conditions are successfully created now
+
+25
+00:01:40.070 --> 00:01:48.289
+let us go on login the user name we have
+
+26
+00:01:48.289 --> 00:01:53.420
+given the password let us login to the
+
+27
+00:01:53.420 --> 00:01:57.710
+website yes we have logged in to the
+
+28
+00:01:57.710 --> 00:02:00.259
+website and here we can see the username
+
+29
+00:02:00.259 --> 00:02:02.330
+which we have given under here we can
+
+30
+00:02:02.330 --> 00:02:04.880
+see a logout button search for a book
+
+31
+00:02:04.880 --> 00:02:07.069
+and here we can search and search for a
+
+32
+00:02:07.069 --> 00:02:11.120
+book by author or title or ISBN number
+
+33
+00:02:11.120 --> 00:02:19.100
+such power or the Chetan Bhagat yes so I
+
+34
+00:02:19.100 --> 00:02:21.140
+think these two are the results which
+
+35
+00:02:21.140 --> 00:02:23.090
+they have fetching in the database let
+
+36
+00:02:23.090 --> 00:02:29.599
+us see more about this book yes this is
+
+37
+00:02:29.599 --> 00:02:32.450
+the information and here you can see the
+
+38
+00:02:32.450 --> 00:02:36.799
+review submitted by users users Korean
+
+39
+00:02:36.799 --> 00:02:41.780
+on Ravenwood these reviews and these are
+
+40
+00:02:41.780 --> 00:02:45.760
+the details of the book which we have
+
+41
+00:02:45.760 --> 00:02:49.180
+browse for Hospital friend order
+
+42
+00:02:49.180 --> 00:02:52.280
+publicity and ISP a number and these are
+
+43
+00:02:52.280 --> 00:02:56.900
+the average ratings given by good users
+
+44
+00:02:56.900 --> 00:02:59.810
+on Goodreads now let us try to submit
+
+45
+00:02:59.810 --> 00:03:07.600
+our will review and let us give it
+
+46
+00:03:07.600 --> 00:03:13.100
+everything that a submitter review let
+
+47
+00:03:13.100 --> 00:03:24.139
+us see yes you can see here our rating
+
+48
+00:03:24.139 --> 00:03:54.769
+has been submitted here let us see let
+
+49
+00:03:54.769 --> 00:04:01.030
+us logout and log in from other account
+
+50
+00:04:01.030 --> 00:04:09.440
+let us see is the saga digital submitted
+
+51
+00:04:09.440 --> 00:04:11.690
+by one account are being reflected in
+
+52
+00:04:11.690 --> 00:04:14.590
+other account
+
+53
+00:04:24.460 --> 00:04:27.560
+unless it is being reflected in other
+
+54
+00:04:27.560 --> 00:04:30.800
+account as well on let us make this
+
+55
+00:04:30.800 --> 00:04:34.850
+website also has APA
+
+56
+00:04:34.850 --> 00:04:39.830
+if you requests for one such APA with
+
+57
+00:04:39.830 --> 00:04:42.350
+ASP number it will return the rejection
+
+58
+00:04:42.350 --> 00:04:45.830
+response of students and we can also
+
+59
+00:04:45.830 --> 00:04:49.700
+successfully log out and it will take us
+
+60
+00:04:49.700 --> 00:04:54.640
+to login thank you for viewing the video
+

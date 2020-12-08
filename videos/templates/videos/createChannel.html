@@ -1,0 +1,62 @@
+{% extends 'videos/channelcreatinglayout.html' %}
+
+{%block body%}
+        <div id="channeldetails">
+            <img src="../../static/createChannel.jpeg" alt="" width="85%">
+            <div id="channeldetailsform">
+                <h3>Create your channel name</h3>
+                <p style="font-size:14px; color: rgb(128, 126, 126);">You can use your brand's name or another name. A good channel name represents you and your content. You can change your channel name at any time.
+                    <a href="https://www.youtube.com/watch?v=y41nwoG8em8&feature=youtu.be" target="_blank">Learn more</a>
+                </p>
+                <form action="{% url 'channelsetup' %}" method="POST">
+                     {%csrf_token%}
+                    <div class="form-group" style="text-align: left;">
+                        <label class="form-control container" for="customChannelName">Channel name</label>
+                        <input id="channelname" type="text" class="form-control" placeholder="Add channel name here" name="customChannelName" required>
+                        
+                        <!--checkbox-->
+                        <label class="checkbox-inline" style="margin-top: 7px;">
+                            <input onclick="unlockBtn()" id="cbox" type="checkbox" required>
+                            I understand that I am creating a new Google Account with its own settings, including YouTube search and watch history.
+                            <a href="https://safety.google/">Learn more</a>
+                        </label>
+                        <!--checkbox ends-->
+
+                    </div>
+                    <a href="{% url 'index' %}"><button class="btn btn-light" style="color: blue; background-color:white">CANCEL</button></a>
+                    <button class="btn btn-light" style="color: white; background-color:#008CBA" type="submit" id="createbtn">CREATE</button>
+                </form>   
+                <br>
+            </div>
+            <div style="padding: 18px 80px 0 80px;">
+                <p><small>You can view your Google Account at anytime by just logging into <a href="https://myaccounts.google.com">myaccount.google.com</a><br>Learn more about channels and brand accounts. By selecting 'Create' you agree to<br><a href="https://www.youtube.com/t/terms">YouTube's Terms of Service.</a></small></p>
+
+                <small>&copy; 2020 Google</small>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', ()=>{
+                document.querySelector('#createbtn').disabled = true;
+                
+                var checkbox = document.querySelector('#cbox');
+
+            document.querySelector('#channelname').onkeyup = ()=>{
+                if(document.querySelector('#channelname').value.length >=1 && checkbox.checked == true)
+                    document.querySelector('#createbtn').disabled = false;
+                else
+                    document.querySelector('#createbtn').disabled = true;
+            }
+
+            });
+            function unlockBtn(){
+                //get the element
+                var checkbox = document.querySelector('#cbox');
+                var channelName = document.querySelector('#channelname').value;
+                if(checkbox.checked == true && channelName.length >= 1)
+                    document.querySelector('#createbtn').disabled = false;
+                else
+                    document.querySelector('#createbtn').disabled = true;
+            }
+        </script>
+{%endblock%}

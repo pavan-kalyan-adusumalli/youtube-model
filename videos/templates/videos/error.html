@@ -1,0 +1,17 @@
+<html>
+    <body>
+        <h3>{{message}}</h3>
+        redirecting you back, {{info}}
+        <script>
+            // sleep time expects milliseconds
+            function sleepNow (time) {
+                return new Promise((resolve) => setTimeout(resolve, time));
+            }
+            // Usage!
+            sleepNow(1500).then(() => {
+                // Do something after the sleep!
+            window.history.back();
+            });
+        </script>
+    </body>
+</html>

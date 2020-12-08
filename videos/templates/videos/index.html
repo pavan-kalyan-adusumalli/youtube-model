@@ -1,0 +1,118 @@
+{% extends 'videos/layout.html' %}
+
+{% block title %}YouTube{% endblock %}
+
+
+{% block body %}
+
+{%verbatim%}
+
+    <script id="choicehandlebar" type="text/x-handlebars-template">
+        <div style="margin: 15px 20px; font-size:16px;">
+            <input style="width:fit-content; display:inline-block;" type="checkbox" value="{{playlistid}}" name="playlists">&nbsp;&nbsp;&nbsp;&nbsp;{{playlistname}}
+        </div>
+    </script>
+{%endverbatim%}
+<!--<a href="{% url 'watchPlaylist' 1 4 %}">watch playlist</a>-->
+
+    <div id="videos">
+        <div id="container">
+            {% for video in videos %}
+                <div class="video" style="display: inline-block;">
+                    <a href="{% url 'watch' video.id %}">
+                    <img class="thumbnail" src="{{video.thumbnail.url}}" alt="thumbnail">
+                    </a><br>
+                    <a href="{% url 'channel' video.uploadedchannel.id %}">
+                        <img class="profilepic" src="{{video.uploadedchannel.channelpicture.url}}" alt="video">
+                    </a><!--
+                    --><a href="{% url 'watch' video.id %}">
+                    <div class="details">
+                        <b>{{video.videoname}}</b><br>
+                        <p>{{video.uploadedchannel.channelname}}</p>
+                        <p>{{video.views}} views</p>
+                    </div></a>
+                    
+                    <span style="float: right; position:absolute; margin-right:20px; width:15px; text-align:center;">
+                        
+                        <div class="dropleft">
+                            <button style="border: none; background-color:transparent;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {%if request.user.is_authenticated %}
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                                <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                                {%endif%}
+                            </div>
+                        </div>
+                    
+                    </span>
+                    </div>
+            {%empty%}
+                    <div style="text-align: center;">You have no videos to watch here</div>
+            {%endfor%}
+
+            <!--<div id="overlay5"><div id="anim">Playlist Created successfully!</div>
+                <div id="text" style="width: 20%;"><--override some properties of #text--
+                    <div id="" style="background-color:white; color:black; text-align:left; min-width:188px;">
+                        <h4 style="display: inline-block; margin-left:10px;">Save to... <small style="color: white;" id="curchannelid">{{userchannel.id}}</small></h4>
+                        <button class="btn btn-light close" style="margin: 10px 10px 0 0;" onclick="off(5)"><i class="fa fa-times"></i></button>
+                        <hr style="margin-top: 0;">
+                        <div id="choices">
+                            <form action="{% url 'savetoplaylists' %}" method='POST'>
+                                {%csrf_token%}
+                        {% for playlist in userplaylists %}
+                        <div style="margin: 15px 20px; font-size:16px;">
+                            <input style="width:fit-content; display:inline-block;" type="checkbox" value="{{playlist.id}}" name="playlists">&nbsp;&nbsp;&nbsp;&nbsp;{{playlist.playlistname}}
+                        </div>
+                        {%endfor%}
+                            <input id="videoid" style="color: white;" value="" name="videoid" hidden>
+                            <button class="btn btn-light" style="background-color: white; margin-left:60%;">SAVE</button>
+                            </form>
+                        </div>
+                        <hr>
+
+                        <div class="dropdown">
+                            <button style="background-color: white; margin: auto auto 15px 30px;" class="btn btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Create Playlist
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              
+                                <input id="playlistname" style="margin: 5px; width:80%;" class="form-control" type="text" class="dropdown-item" placeholder="Enter Playlist name">
+                                <div style="margin-top: 5px;" class="dropdown-item">Private&nbsp;&nbsp;<input id="cbox" type="checkbox"></div>
+                                <button onclick="createNewPlaylist()" id="createPlaylist" class="btn btn-light dropdown-item" style="color: #337ab7; width:50%; margin-left:45%;">CREATE</button>
+                    
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>    
+            </div><--end of overlay5-->
+        </div>
+
+        <!--<div class="video" style="display: inline-block;">
+            <a href="{% url 'watch' 1 %}">
+            <img class="thumbnail" src="../../static/Screenshot_467.png" alt="video">
+            </a><br>
+            <a href="{% url 'channel' 3 %}">
+                <img class="profilepic" src="../../static/black.png" alt="video">
+            </a>
+            <a href="{% url 'watch' 1%}">
+                <div class="details">
+                        <b>Making of suriya's 24 in poland scenes</b><br>
+                        <p>ROYAL EXPRESS TV</p>
+                        <p>10 lakh views</p>
+                </div>
+            </a>
+        </div>-->
+    </div>
+
+
+<script>
+    
+
+
+</script>
+
+{%endblock%}

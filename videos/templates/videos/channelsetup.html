@@ -1,0 +1,117 @@
+{% extends 'videos/channelcreatinglayout.html' %}
+{%block body%}
+    <br>
+    <div id="channeldetails" style="width: 55%;">
+        <h4><b>Nice work!</b></h4>
+        <h4><b>Your channel '<span id="cname">{{ChannelName}}</span>' has been created.</b></h4>
+        <p><small>Next, follow the steps to complete your channel. You can do these steps now or come back later.</small></p>
+        <img src="../../static/channelsetup.jpeg" alt="" width="90%">
+
+    {% if customizing %}
+        <form action="{% url 'customize' channelobj.id %}" method="POST" enctype="multipart/form-data" style="text-align: center;">
+    {% else %}
+        <form action="{% url 'mychannel' %}" method="POST" enctype="multipart/form-data" style="text-align: center;">
+    {%endif%}
+        Your Google Account{{form.owner}} Your channelname{{form.channelname}}
+        <input type="text" id="user" value="{{curuser.id}}" hidden>
+        {% csrf_token %}
+        <div id="channeldetailsform" style="width: 100%;">
+            <br>
+            <h4><b>Upload a profile picture</b></h4>
+            <p><small>Your profile picture appears next to your videos and comments, and in other places. It's your sigrature image on YouTube. <br> suggested size is 800X800</small></p>
+            <img src="{{extradata.picture}}" alt="" width="25%" style="border-radius: 50%;">
+            <button style="background-color: white; color:#337ab7; display:block; border:none; margin:5px auto;"><p style="color:#337ab7; display: block; font-weight:500;">UPLOAD PICTURE</p></button>
+            
+            {{form.channelpicture}}
+
+        </div>
+
+        <div id="channeldetailsform" style="margin-top: 30px; width:100%;">
+            <br>
+            <h4><b>Tell viewers about your channel</b></h4>
+            <p><small>Let viewers know what or whom your vieos about. Your description can appear in search results and other places.</small></p>
+            
+            {{form.description}}
+
+        </div>
+
+        <div id="channeldetailsform" style="margin-top: 30px; width:100%;">
+            <h4><b>Add links to your sites</b></h4>
+            <p><small>Sharing links helps viewers to stay connected with you and your latest videos.</small></p>
+
+            <div class="input-group mb-3 links">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Your website</span>
+                    {{form.portfolio}}
+                </div>
+            </div>
+
+            <div class="input-group mb-3 links">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-facebook-official"></i></span>
+                    {{form.fblink}}
+                    <div class="input-group-append">
+                        <span class="input-group-text">Add profile name</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group mb-3 links">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-twitter"></i></span>
+                    {{form.twitterlink}}
+                    <div class="input-group-append">
+                        <span class="input-group-text">Add profile name</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-group mb-3 links">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-instagram"></i></span>
+                    {{form.instalink}}
+                    <div class="input-group-append">
+                        <span class="input-group-text">Add profile name</span>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+        </div>
+        <br>
+        <button style="background-color: white; color:#337ab7; border:none; font-size:11px;"><b>SET UP LATER</b></button>
+        <button onclick="showImg()" class="btn btn-light" style="color: white; background-color:#337ab7; font-size:11px;" type="submit" id="savebtn">SAVE AND CONTINUE</button>
+    </form>
+    </div>
+    <script>
+        function showImg(){
+            //alert(document.querySelector('#id_channelpicture').value);
+        }
+        document.addEventListener('DOMContentLoaded', ()=>{
+            //channelname
+            document.querySelector('#id_channelname').value = document.querySelector('#cname').innerHTML;
+
+            //channel owner
+            document.querySelector('#id_owner').value = document.querySelector('#user').value;
+            document.querySelector('#id_owner').disabled = false;
+
+            //channel description
+            document.querySelector('#id_description').placeholder = 'Add channel description';
+            
+            //social links
+            document.querySelector('#id_fblink').placeholder = 'Add profile name';
+            document.querySelector('#id_fblink').value = 'https://www.facebook.com/';
+            document.querySelector('#id_twitterlink').value = 'https://www.twitter.com/';
+            document.querySelector('#id_instalink').value = 'https://www.instagram.com/';
+
+            //submit button lock and unlock
+            document.querySelector('#savebtn').disabled = true;
+            document.querySelector('#id_description').onkeyup =()=>{
+                if(document.querySelector('#id_description').value.length >=1 )
+                    document.querySelector('#savebtn').disabled = false;
+                else
+                    document.querySelector('#savebtn').disabled = true;
+            }
+        })
+    </script>
+{%endblock%}

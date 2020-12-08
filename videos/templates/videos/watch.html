@@ -1,0 +1,366 @@
+{% extends "videos/layout.html" %}
+
+{%block title%}Video title{%endblock%}
+
+{% block head%} 
+{%verbatim%}
+
+<script id="likehandlebar" type="text/x-handlebars-template">
+    <button onclick="likethis()" class="btn btn-light" style="float: right;"><i style="color: #337ab7;" class="fa fa-thumbs-up"></i>&nbsp;{{likescount}}</button>
+</script>
+
+<script id="removelikehandlebar" type="text/x-handlebars-template">
+    <button onclick="likethis()" class="btn btn-light" style="float: right;"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{likescount}}</button>
+</script>
+<script id="dislikehandlebar" type="text/x-handlebars-template">
+    <button onclick="dislikethis()" class="btn btn-light" style="float: right;"><i style="color: #337ab7;" class="fa fa-thumbs-down"></i>&nbsp;{{dislikescount}}</button>
+</script>
+<script id="removedislikehandlebar" type="text/x-handlebars-template">
+    <button onclick="dislikethis()" class="btn btn-light" style="float: right;"><i class="fa fa-thumbs-o-down"></i>&nbsp;{{dislikescount}}</button>
+</script>
+
+<script id="commenthandlebar" type="text/x-handlebars-template">
+    
+    <div style="margin-top: 15px;">
+        <img src={{commentatorPic}} alt="" width="5%" style="border-radius:50%; min-width:39px; vertical-align:top;">
+        <div style="display: inline-block; margin-left:2px;">
+        <b>{{commentatorName}}</b>&nbsp;<span style="opacity: 0.5;"><small>on {{commenteddate}}</small></span><br>
+        {{commentcontent}}
+        </div>
+    </div>
+</script>
+
+<!--
+<script id="subhandlebar" type="text/x-handlebars-template">
+    <button id="subscribebtn" class="btn btn-danger" style="background-color:red" onclick="subscribeUser()">SUBSCRIBE</button>
+</script>
+<script id="unsubhandlebar" type="text/x-handlebars-template">
+    <button id="unsubscribebtn" class="btn btn-light" onclick="unsubscribe()">SUBSCRIBED</button>
+</script>
+-->
+{%endverbatim%}
+{%endblock%}
+{%block body%}
+<div id="watching" style="margin: 25px 0 0 25px;">
+    <div id="mainvideo" style="display:inline-block;">
+        <video controls width="100%" poster="{{video.thumbnail.url}}" style="border:1px solid black; float:left">
+            <source src="{{video.recording.url}}" type="video/mp4">
+                {% if video.subtitles %}
+                    <track src="{{video.subtitles.url}}" kind="captions" srclang="en" label="English">
+                {%endif%}
+        </video>
+        <div id="videodetails" style="width: 100%;margin-top:10px; margin-left:25px; display:inline-block;">
+            
+            <h4 style="font-weight: 500;">{{video.videoname}}</h4>
+            {{video.views}} views • <small>on {{video.published_date}}</small> 
+            <p id="hiddenchannelid" style="font-size: 3px; color:white; display:inline-block;">{{video.uploadedchannel.id}}</p>
+            <p id="hiddenvideoid" style="font-size: 3px; color:white; display:inline-block;">{{video.id}}</p>
+            
+            <!-- more, likes and dislikes-->
+            <div class="dropleft" style="float: right;">
+                <i type="button" class="btn btn-light" style="background-color: white;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v"></i>
+                </i>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {%if request.user.is_authenticated %}
+                    <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                    <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                    {%endif%}
+                </div>
+            </div>
+            <!--likes and dislikes-->
+            <div id="dislikediv" style="float: right;">
+                {% if disliked %}
+                <button onclick="dislikethis()" class="btn btn-light" style=" background-color:white;"><i style="color: #337ab7;" class="fa fa-thumbs-down"></i>&nbsp;{{dislikescount}}</button>
+                {%else%}
+                <button onclick="dislikethis()" class="btn btn-light" style=" background-color:white;"><i class="fa fa-thumbs-o-down"></i>&nbsp;{{dislikescount}}</button>
+                {%endif%}
+            </div>
+            <div id="likediv" style="float: right;">
+                {% if liked %}
+                <button onclick="likethis()" class="btn btn-light" style="background-color:white;"><i style="color: #337ab7;" class="fa fa-thumbs-up"></i>&nbsp;{{likescount}}</button>
+                {%else%}
+                <button onclick="likethis()" class="btn btn-light" style="background-color:white;"><i class="fa fa-thumbs-o-up"></i>&nbsp;{{likescount}}</button>
+                {%endif%}
+            </div>
+            
+            <hr style="clear: both;">
+            <div id="anim">namaste</div>
+            <div id="channelinformation">
+                <a style="text-decoration: none; color:black;" href="{% url 'channel' video.uploadedchannel.id%}"><img src="{{video.uploadedchannel.channelpicture.url}}" alt="" width="6%" style="border-radius: 50%; min-width:39px;">
+                &nbsp;&nbsp;
+                <div style="vertical-align:top; display:inline-block; width:fit-content;">
+                    <small><b>{{video.uploadedchannel.channelname}}</b></small><br>
+                    <small>{{1}} subscribers</small>
+                </div></a>
+                
+                <div id="subdiv" style="float:right; margin-right:5%; width:fit-content;">
+                    {% if subscribed %}
+                            <button id="unsubscribebtn" class="btn btn-light" data-channelid="{{video.uploadedchannel.id}}"  onclick="unsubscribe(this)">SUBSCRIBED</button>
+                    
+                    {%else%}
+                            <button id="subscribebtn" class="btn btn-danger" data-channelid="{{video.uploadedchannel.id}}" style="background-color:red" onclick="subscribeUser(this)">SUBSCRIBE</button>
+                        
+                    {%endif%}
+                </div>
+                <div style="padding:5%;">
+                    <small>{{video.description}}</small>
+                </div>
+        
+            </div>
+            <hr>
+            {% if not video.hideComments %}
+                <div id="commentsdiv">
+                    {{noofcomments}} Comments <br><br>
+                    
+                        {% if request.user.is_authenticated%}
+                            <img src="{{extradata.picture}}" alt="" width="6%" style="border-radius:50%; min-width:39px;">
+                        {%else%}
+                            <i class="fa fa-user" style="width: 6%; border-radius:50%;"></i>
+                        {%endif%} 
+                        
+                        <textarea id="comment" name="comment" rows="1" placeholder="Add a public comment" style=" width:90%; margin-left:1.5%; border:white; border-bottom: 1px solid black;"></textarea>
+                        {%csrf_token%}
+                        <br>
+                        <button onclick="addcomment()" id="submitcomment" class="btn btn-info" style="background-color: #337ab7; color:white; float:right; margin-right:3%; text-transform:uppercase; font-size:12px;">comment</button>
+                        <button onclick="clear()" id="cancelcomment" type="reset" class="btn btn-light" style="float: right; text-transform:uppercase; font-size: 12px;">cancel</button>
+                    
+                </div>
+                <br><br>
+                
+                
+                <div id="allcomments">
+                    {%for comment in comments%}
+                        <div style="margin-top: 15px;">
+                            <img src="{{comment.owner.userpicture}}" alt="" width="5%" style="border-radius:50%; min-width:39px; vertical-align:top;">
+                            <div style="display: inline-block; margin-left:2px;">
+                            <b>{{comment.owner.username}}</b>&nbsp;<span style="opacity: 0.5;"><small>on {{comment.date}}</small></span><br>
+                            {{comment.content}}
+
+                            </div>
+                        </div>
+                    {%endfor%}
+                </div>
+            {%else%}
+                <div id="commentsdiv" style="text-align: center;">
+                    <p style="color: rgb(92, 91, 91);">Comments have been disabled for this video.</p>
+                </div>
+            {%endif%}
+            
+        </div>
+        </div>
+    
+    <div class="suggestedVideos"><!--suggestions video division-->
+        {% if playlistvideos%}
+        <div style="background-color:rgb(241, 241, 241);">
+            <br>
+            {% if playlistobj %}<!-- for playlist videos-->
+            <div style="margin-left: 10px;">   
+                <b style="display: block; font-size:16px;">{{playlistobj.playlistname}}</b> 
+                {{playlistobj.channelname.channelname}}
+            </div>
+            <hr style="border-color:rgb(182, 182, 182);">
+            {%endif%}
+        
+
+                {%for video in playlistvideos%}
+                    
+                    <a href="{% url 'watch' video.id %}" style="margin-top: 25px; color:black">
+                        <div class="suggestions" style="display: inline-block; padding-left:5%;">
+                            <span style="vertical-align: center; margin-right:2px;">=</span>        
+                            <img  src="{{video.thumbnail.url}}" alt="video" style="width: 25%; vertical-align: top;"><!--
+
+                        --><div style="display: inline-block;width:50%; text-align:left; margin-left:1%;">
+                                <b>{{video.videoname}}</b><br>
+                                <p>{{video.uploadedchannel.channelname}}</p>
+                            </div>
+                        </div></a>
+                    <br>
+                {%endfor%}
+            <br>
+        </div><!--end of playlist videos-->
+        <hr>
+        {%endif%}
+        <!--Subscribed channels videos-->
+        {%for video in subvideos%}
+        
+            <div class="suggestions" style="display: inline-block; width:fit-content;">
+                <a href="{% url 'watch' video.id %}" style="margin-top: 25px; color:black">
+                    <img  src="{{video.thumbnail.url}}" alt="video">
+                    <!--<img class="profilepic" src="../../static/black.png" alt="video">
+                    --><div style="display: inline-block;width:50%; text-align:left; margin-left:1%;">
+                        <b>{{video.videoname}}</b><br>
+                        <p>{{video.uploadedchannel.channelname}}</p>
+                        <p>{{video.views}} views</p>
+                    </div>
+                </a>
+
+                <div class="dropleft" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background-color: white;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                        {%endif%}
+                    </div>
+                </div>
+
+            </div>
+            <br>
+        {%empty%}
+            {%for video in suggestions%}
+            <div class="suggestions" style="display: inline-block; width:fit-content;">
+                <a href="{% url 'watch' video.id %}" style="margin-top: 25px; color:black">
+                    <img  src="{{video.thumbnail.url}}" alt="video">
+                    <!--<img class="profilepic" src="../../static/black.png" alt="video">
+                    --><div style="display: inline-block;width:50%; text-align:left; margin-left:1%;">
+                        <b>{{video.videoname}}</b><br>
+                        <p>{{video.uploadedchannel.channelname}}</p>
+                        <p>{{video.views}} views</p>
+                    </div>
+                </a>
+            </div>
+            <br>
+            {%endfor%}
+        {%endfor%}
+
+        <!--<div class="suggestions" style="display: inline-block;">
+            <a href="{% url 'watch' 1 %}" style="margin-top: 25px; color:black">    
+                <img  src="../../static/Screenshot_467.png" alt="video">
+                <img class="profilepic" src="../../static/black.png" alt="video">
+                <div style="display: inline-block; width:50%; text-align:left;">
+                    <b>Making of suriya's 24 in poland scenes</b><br>
+                    <p>ROYAL EXPRESS TV</p>
+                    <p>10 lakh views</p>
+                </div>
+            </a>
+        </div>
+        <br>-->
+
+        
+        
+    </div><!--end of suggestions video division-->
+    
+</div>
+
+
+<script>
+    //dislikes
+    function dislikethis(){
+        disliketemplate = Handlebars.compile(document.querySelector('#dislikehandlebar').innerHTML);
+        removedisliketemplate = Handlebars.compile(document.querySelector('#removedislikehandlebar').innerHTML);
+        removeliketemplate = Handlebars.compile(document.querySelector('#removelikehandlebar').innerHTML);
+        const videoid = document.querySelector('#hiddenvideoid').innerHTML;
+        fetch(`/dislike?videoid=${videoid}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.dislikestatus == 'loggedout')
+                alert('You should login to dislike this, login using signin button');
+            else if(data.dislikestatus == 'addeddislike'){
+                document.querySelector('#dislikediv').innerHTML= disliketemplate({"dislikescount":data.dislikescount});
+                document.querySelector('#likediv').innerHTML = removeliketemplate({"likescount":data.likescount});
+                document.querySelector('#anim').innerHTML = 'You disliked this video';
+                document.querySelector('#anim').style.animationPlayState = 'running';
+            }
+            else{
+                document.querySelector('#dislikediv').innerHTML= removedisliketemplate({"dislikescount":data.dislikescount});
+            }
+        })
+    }
+    //likes
+    function likethis(){
+        liketemplate = Handlebars.compile(document.querySelector('#likehandlebar').innerHTML);
+        removeliketemplate = Handlebars.compile(document.querySelector('#removelikehandlebar').innerHTML);
+        removedisliketemplate = Handlebars.compile(document.querySelector('#removedislikehandlebar').innerHTML);
+
+        const videoid = document.querySelector('#hiddenvideoid').innerHTML;
+        fetch(`/like?videoid=${videoid}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.likestatus == 'loggedout')
+                alert('You should login to like this, login using signin button');
+            else if(data.likestatus == 'addedlike'){
+                document.querySelector('#likediv').innerHTML= liketemplate({'likescount':data.likescount});
+                document.querySelector('#dislikediv').innerHTML= removedisliketemplate({'dislikescount':data.dislikescount});
+                document.querySelector('#anim').innerHTML = 'Added to liked videos';
+                document.querySelector('#anim').style.animationPlayState='running';
+            }
+            else
+                document.querySelector('#likediv').innerHTML= removeliketemplate({'likescount':data.likescount});
+
+        })
+    }
+ /*   
+    //subscriptions
+    function subscribeUser(){
+        //compile handlebars template
+        const unsubtemplate = Handlebars.compile(document.querySelector('#unsubhandlebar').innerHTML);
+        alert('hai')
+        const channelid = document.querySelector('#hiddenchannelid').innerHTML;
+        alert(channelid);
+        fetch(`/subscribe?channelid=${channelid}`)
+        .then(response => response.json())
+        .then(data =>{
+            if(data.subscriptionStatus == 'loggedout')
+                window.location.replace("/");
+            else if(data.subscriptionStatus){
+                document.querySelector('#subdiv').innerHTML='';
+                document.querySelector('#subdiv').innerHTML=unsubtemplate();
+        }
+        })
+    }//end of funciton
+
+    function unsubscribe(){
+        //compile handlebars template
+        alert('hai')
+        const subtemplate = Handlebars.compile(document.querySelector('#subhandlebar').innerHTML);
+        const channelid = document.querySelector('#hiddenchannelid').innerHTML;
+        fetch(`/unsubscribe?channelid=${channelid}`)
+        .then(response => response.json())
+        .then(data =>{
+            if(data.unsubscriptionStatus == 'loggedout')
+                window.location.replace("/");
+            else if(data.unsubscriptionStatus){
+                document.querySelector('#subdiv').innerHTML='';
+                document.querySelector('#subdiv').innerHTML=subtemplate({'channelid':channelid});
+        }
+        })
+    }//end of function*/
+
+    function addcomment(){
+        const commentTemplate = Handlebars.compile(document.querySelector('#commenthandlebar').innerHTML)
+        const content = document.querySelector('#comment').value;
+        const videoid = document.querySelector('#hiddenvideoid').innerHTML;
+        fetch(`/comment?content=${content}&videoid=${videoid}`)
+        .then(response => response.json())
+        .then(data =>{
+            if(data.commentStatus == 'loggedout'){
+                alert('you need to login to add a comment')
+                document.querySelector('#comment').value = '';
+            }
+            else if(data.commentStatus == 'true'){
+                //something to do with data
+                document.querySelector('#allcomments').innerHTML += commentTemplate({"commentatorName":data.commentatorname, 'commentatorPic':data.commentatorpic, 'commentcontent':data.commentcontent, 'commenteddate':data.commenteddate})
+                document.querySelector('#comment').value = ''
+            }
+        })
+    }
+
+    function clear(){
+        document.querySelector('#submitcomment').value = '';
+    }
+    document.addEventListener("DOMContentLoaded",()=>{
+        document.querySelector('#submitcomment').disabled = true;
+
+        //comments
+        document.querySelector('#comment').onkeyup = ()=>{
+            if(document.querySelector('#comment').value != '')
+                document.querySelector('#submitcomment').disabled = false;
+            else
+                document.querySelector('#submitcomment').disabled = true;
+        }
+    })
+</script>
+{%endblock%}

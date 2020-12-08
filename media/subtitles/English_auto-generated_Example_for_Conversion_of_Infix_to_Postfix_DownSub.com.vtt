@@ -1,0 +1,726 @@
+WEBVTT
+
+1
+00:00:00.230 --> 00:00:03.780
+hello friends welcome to this video in
+
+2
+00:00:03.780 --> 00:00:07.560
+this video we are going to discuss how
+
+3
+00:00:07.560 --> 00:00:11.099
+to evaluate expressions especially in
+
+4
+00:00:11.099 --> 00:00:13.349
+this video we are going to discuss how
+
+5
+00:00:13.349 --> 00:00:16.680
+to convert a in fix expression to
+
+6
+00:00:16.680 --> 00:00:19.619
+postfix expression first of all what is
+
+7
+00:00:19.619 --> 00:00:22.529
+meant by expression an expression is
+
+8
+00:00:22.529 --> 00:00:25.170
+defined as the combination of operands
+
+9
+00:00:25.170 --> 00:00:28.050
+and operators they are arranging as per
+
+10
+00:00:28.050 --> 00:00:31.080
+the syntax of language there are three
+
+11
+00:00:31.080 --> 00:00:35.340
+types of expressions they are prefix in
+
+12
+00:00:35.340 --> 00:00:38.820
+fix and postfix what is meant by prefix
+
+13
+00:00:38.820 --> 00:00:42.329
+expression the operator symbol will be
+
+14
+00:00:42.329 --> 00:00:47.370
+in front of two operands and when we
+
+15
+00:00:47.370 --> 00:00:49.920
+come to in fix the operator symbol will
+
+16
+00:00:49.920 --> 00:00:52.199
+be in between two operands and in
+
+17
+00:00:52.199 --> 00:00:54.899
+postfix expression the operator symbols
+
+18
+00:00:54.899 --> 00:01:02.550
+will be after the operands so let us
+
+19
+00:01:02.550 --> 00:01:05.659
+know the algorithm for converting an
+
+20
+00:01:05.659 --> 00:01:09.680
+infix expression to perfect expression
+
+21
+00:01:09.680 --> 00:01:13.320
+so what's the algorithm is first of all
+
+22
+00:01:13.320 --> 00:01:16.040
+we have to initialize an empty stack
+
+23
+00:01:16.040 --> 00:01:19.520
+after initializing empty stack push an
+
+24
+00:01:19.520 --> 00:01:23.880
+open paranthesis in to stack scan the in
+
+25
+00:01:23.880 --> 00:01:27.450
+fix string from left to right until the
+
+26
+00:01:27.450 --> 00:01:31.890
+end of the in fix expression so instead
+
+27
+00:01:31.890 --> 00:01:35.220
+of reading this algorithm if we can do
+
+28
+00:01:35.220 --> 00:01:38.220
+it with an example it will be a little
+
+29
+00:01:38.220 --> 00:01:41.400
+bit easy for all of you to understand
+
+30
+00:01:41.400 --> 00:01:44.000
+how to evaluate so here is our example
+
+31
+00:01:44.000 --> 00:01:49.229
+let us consider this this is an infix
+
+32
+00:01:49.229 --> 00:01:53.189
+expression with a b c d or operands and
+
+33
+00:01:53.189 --> 00:01:58.280
+star place and again a stick star is or
+
+34
+00:01:58.280 --> 00:02:03.689
+operators so let us watch what's the
+
+35
+00:02:03.689 --> 00:02:06.570
+first step in algorithm first of all
+
+36
+00:02:06.570 --> 00:02:09.239
+initialize and empty stack we have
+
+37
+00:02:09.239 --> 00:02:12.090
+already done this heavens related and
+
+38
+00:02:12.090 --> 00:02:14.010
+empty stack this is all
+
+39
+00:02:14.010 --> 00:02:18.360
+dystek so let us see what's the second
+
+40
+00:02:18.360 --> 00:02:22.140
+step in the algorithm the second step
+
+41
+00:02:22.140 --> 00:02:24.720
+often is learning empty empty stack push
+
+42
+00:02:24.720 --> 00:02:27.299
+an open pair on this into stack so now
+
+43
+00:02:27.299 --> 00:02:29.519
+let us push an open paranthesis symbol
+
+44
+00:02:29.519 --> 00:02:32.540
+into stack we are going to write all the
+
+45
+00:02:32.540 --> 00:02:36.569
+symbols which are read from the example
+
+46
+00:02:36.569 --> 00:02:40.890
+here so let us push a open Aransas into
+
+47
+00:02:40.890 --> 00:02:46.349
+the stack here we open paranthesis is
+
+48
+00:02:46.349 --> 00:02:48.180
+pushing into the stack and the in fix
+
+49
+00:02:48.180 --> 00:02:53.269
+expression will be remain same sorry
+
+50
+00:02:53.269 --> 00:03:01.709
+yeah this postfix expression so after
+
+51
+00:03:01.709 --> 00:03:05.760
+pushing an open Terrance's what we have
+
+52
+00:03:05.760 --> 00:03:07.920
+to do scan the in fixed string from left
+
+53
+00:03:07.920 --> 00:03:10.019
+to right until the end of ethics
+
+54
+00:03:10.019 --> 00:03:12.840
+expression so let us scan the infix
+
+55
+00:03:12.840 --> 00:03:15.239
+expression the first element of ins in
+
+56
+00:03:15.239 --> 00:03:19.340
+fix expression is a so let us write a
+
+57
+00:03:19.340 --> 00:03:27.060
+here the stack will remain same so what
+
+58
+00:03:27.060 --> 00:03:31.169
+what we have to do off the scanning if
+
+59
+00:03:31.169 --> 00:03:33.450
+the character is open Terrence's push
+
+60
+00:03:33.450 --> 00:03:36.540
+into the stack but we have scanned an
+
+61
+00:03:36.540 --> 00:03:41.280
+operand so this can character is an
+
+62
+00:03:41.280 --> 00:03:45.239
+operand then push it into postfix
+
+63
+00:03:45.239 --> 00:03:49.290
+expression so let us push a into post
+
+64
+00:03:49.290 --> 00:03:52.859
+fix expression stack will remain same
+
+65
+00:03:52.859 --> 00:03:58.169
+with an open branches so let us see
+
+66
+00:03:58.169 --> 00:04:01.049
+what's the second element here a strict
+
+67
+00:04:01.049 --> 00:04:03.150
+symbol is the second element here so let
+
+68
+00:04:03.150 --> 00:04:05.879
+us write this as click symbol in token
+
+69
+00:04:05.879 --> 00:04:11.970
+column so what is a stick it is an
+
+70
+00:04:11.970 --> 00:04:14.549
+operator but not an opening so let us
+
+71
+00:04:14.549 --> 00:04:21.209
+see what if an operator is scanned so if
+
+72
+00:04:21.209 --> 00:04:24.200
+the standard character is an operator
+
+73
+00:04:24.200 --> 00:04:27.910
+then compare the precedence of operators
+
+74
+00:04:27.910 --> 00:04:29.560
+with the operator on the top of the
+
+75
+00:04:29.560 --> 00:04:33.280
+stack but on the top of the stack we
+
+76
+00:04:33.280 --> 00:04:35.650
+don't have any operators except open
+
+77
+00:04:35.650 --> 00:04:38.350
+balances so there is no problem we can
+
+78
+00:04:38.350 --> 00:04:41.470
+directly push this astrick symbol into
+
+79
+00:04:41.470 --> 00:04:44.890
+stack so the stack will be have an open
+
+80
+00:04:44.890 --> 00:04:49.570
+branches before of estrogen a postfix
+
+81
+00:04:49.570 --> 00:04:53.500
+expression will remain same so let's
+
+82
+00:04:53.500 --> 00:04:55.570
+scan the third element what's the third
+
+83
+00:04:55.570 --> 00:04:58.690
+element here open parenthesis or third
+
+84
+00:04:58.690 --> 00:05:03.040
+element in this fix expression so if it
+
+85
+00:05:03.040 --> 00:05:07.780
+is and advances we have to push the
+
+86
+00:05:07.780 --> 00:05:10.660
+appearances into the stack so what will
+
+87
+00:05:10.660 --> 00:05:12.910
+be this track we have two previous
+
+88
+00:05:12.910 --> 00:05:16.180
+elements in open balances and has click
+
+89
+00:05:16.180 --> 00:05:20.080
+symbol and again we have an open
+
+90
+00:05:20.080 --> 00:05:22.120
+paranthesis the postfix expression will
+
+91
+00:05:22.120 --> 00:05:26.500
+remain same so let us see what's the
+
+92
+00:05:26.500 --> 00:05:28.690
+next element the next scan it character
+
+93
+00:05:28.690 --> 00:05:35.890
+is B so the B is an operand so we have
+
+94
+00:05:35.890 --> 00:05:39.130
+to push that B into postfix expression
+
+95
+00:05:39.130 --> 00:05:43.470
+so the postfix expression will be a B
+
+96
+00:05:43.470 --> 00:05:47.470
+the stack will remains same with orbit
+
+97
+00:05:47.470 --> 00:05:50.010
+open branches multiplication operator
+
+98
+00:05:50.010 --> 00:05:53.620
+and open finances so what's the next
+
+99
+00:05:53.620 --> 00:05:56.820
+element in the infix expression after B
+
+100
+00:05:56.820 --> 00:06:03.790
+we have plus operator ultimate edition
+
+101
+00:06:03.790 --> 00:06:08.080
+so plus operator the scanner character
+
+102
+00:06:08.080 --> 00:06:10.210
+is operator we have to push the operator
+
+103
+00:06:10.210 --> 00:06:14.500
+into stack you check the president's of
+
+104
+00:06:14.500 --> 00:06:16.900
+top element here top element is local
+
+105
+00:06:16.900 --> 00:06:19.210
+branches so no problem we can directly
+
+106
+00:06:19.210 --> 00:06:27.040
+push that plus operator into stack so
+
+107
+00:06:27.040 --> 00:06:30.100
+after pushing the postfix expression
+
+108
+00:06:30.100 --> 00:06:34.600
+will be remain same oh please watch the
+
+109
+00:06:34.600 --> 00:06:37.030
+next character the next character is C
+
+110
+00:06:37.030 --> 00:06:40.960
+see is an operon
+
+111
+00:06:40.960 --> 00:06:43.990
+so we have to push if the scanner
+
+112
+00:06:43.990 --> 00:06:46.449
+character is operator we have to push
+
+113
+00:06:46.449 --> 00:06:49.150
+that into stack and if the scanned
+
+114
+00:06:49.150 --> 00:06:51.580
+character is up then we have pushed that
+
+115
+00:06:51.580 --> 00:06:54.250
+into four six columns or the first
+
+116
+00:06:54.250 --> 00:06:57.850
+column will be ABC and the stack will
+
+117
+00:06:57.850 --> 00:07:01.630
+remain same with open pair on this
+
+118
+00:07:01.630 --> 00:07:04.860
+multiplication over addition
+
+119
+00:07:05.639 --> 00:07:09.000
+so after C we have a closed parenthesis
+
+120
+00:07:09.000 --> 00:07:12.850
+so what if a closed parenthesis is
+
+121
+00:07:12.850 --> 00:07:18.940
+scanned let us see the scanner character
+
+122
+00:07:18.940 --> 00:07:21.759
+is closure Terrance's and pop the
+
+123
+00:07:21.759 --> 00:07:25.300
+elements from stack up to encountering
+
+124
+00:07:25.300 --> 00:07:30.250
+the open Terrance's and we have added
+
+125
+00:07:30.250 --> 00:07:32.770
+pop elements to postfix expression
+
+126
+00:07:32.770 --> 00:07:38.080
+except parentheses so here the scanner
+
+127
+00:07:38.080 --> 00:07:43.810
+character is those appearances so from
+
+128
+00:07:43.810 --> 00:07:47.320
+school closure parent is to first open
+
+129
+00:07:47.320 --> 00:07:50.889
+bracket we have only plus symbol so we
+
+130
+00:07:50.889 --> 00:07:55.780
+have to add that plus symbol to postfix
+
+131
+00:07:55.780 --> 00:08:01.090
+expression except the parent so what's
+
+132
+00:08:01.090 --> 00:08:06.099
+the stack will be that will be open
+
+133
+00:08:06.099 --> 00:08:08.650
+paranthesis under stop these close
+
+134
+00:08:08.650 --> 00:08:11.349
+appearances and open paranthesis will be
+
+135
+00:08:11.349 --> 00:08:15.430
+removed from the stack so let us see
+
+136
+00:08:15.430 --> 00:08:17.759
+what's in the next element in the fix
+
+137
+00:08:17.759 --> 00:08:25.530
+expression the next element is star
+
+138
+00:08:25.530 --> 00:08:33.549
+since we have R here and we have another
+
+139
+00:08:33.549 --> 00:08:34.839
+star here
+
+140
+00:08:34.839 --> 00:08:38.020
+operators of same distance so we are
+
+141
+00:08:38.020 --> 00:08:43.299
+going to remove the existing star here
+
+142
+00:08:43.299 --> 00:08:46.630
+and pushing it into postfix expression
+
+143
+00:08:46.630 --> 00:08:51.010
+and adding the new operator into stack
+
+144
+00:08:51.010 --> 00:08:54.460
+so the first fixed expression will
+
+145
+00:08:54.460 --> 00:09:03.910
+be see bless so here - tak will be open
+
+146
+00:09:03.910 --> 00:09:05.950
+for dances under decently standard as
+
+147
+00:09:05.950 --> 00:09:13.950
+fixing them so what's the next here
+
+148
+00:09:13.950 --> 00:09:19.210
+there is the which is the next element
+
+149
+00:09:19.210 --> 00:09:24.100
+in in fixed rain Saudi we know that D is
+
+150
+00:09:24.100 --> 00:09:28.150
+an operand so we are going to push the
+
+151
+00:09:28.150 --> 00:09:31.710
+into post fixes king so the first fish
+
+152
+00:09:31.710 --> 00:09:37.420
+train will be ABC plus up and this
+
+153
+00:09:37.420 --> 00:09:41.860
+English cannot be the spec will be
+
+154
+00:09:41.860 --> 00:09:45.850
+remain same let us check for the next
+
+155
+00:09:45.850 --> 00:09:47.680
+element in fix expression
+
+156
+00:09:47.680 --> 00:09:51.640
+oh the next element is completed they
+
+157
+00:09:51.640 --> 00:09:55.360
+have not pink to scan from this peg no
+
+158
+00:09:55.360 --> 00:09:55.750
+sorry
+
+159
+00:09:55.750 --> 00:10:00.130
+in fix expression o see the last step
+
+160
+00:10:00.130 --> 00:10:03.250
+after completely reading the infix
+
+161
+00:10:03.250 --> 00:10:05.140
+expression push a closing parenthesis
+
+162
+00:10:05.140 --> 00:10:10.450
+into the stack so now we have to push a
+
+163
+00:10:10.450 --> 00:10:15.210
+closing parenthesis into the stack so
+
+164
+00:10:15.210 --> 00:10:19.290
+what if a closing parenthesis pushed the
+
+165
+00:10:19.290 --> 00:10:22.750
+operators in between open transition
+
+166
+00:10:22.750 --> 00:10:25.180
+closing balances will be removed from
+
+167
+00:10:25.180 --> 00:10:28.210
+the stack and added to postfix
+
+168
+00:10:28.210 --> 00:10:33.780
+expression so we are going to add the
+
+169
+00:10:33.780 --> 00:10:36.520
+multiplication symbol except open
+
+170
+00:10:36.520 --> 00:10:38.950
+paranthesis and closed parenthesis into
+
+171
+00:10:38.950 --> 00:10:40.960
+postfix expression so the poster
+
+172
+00:10:40.960 --> 00:10:47.100
+situation will be ABC plus star D and
+
+173
+00:10:47.100 --> 00:10:52.450
+star symbol so here we got answer he pea
+
+174
+00:10:52.450 --> 00:11:01.170
+puree so final expression final post
+
+175
+00:11:01.279 --> 00:11:11.980
+fix expression equal to ABC plus of the
+
+176
+00:11:11.980 --> 00:11:18.800
+star so this is the way to convert a ill
+
+177
+00:11:18.800 --> 00:11:22.600
+fix expression into a postfix expression
+
+178
+00:11:22.600 --> 00:11:24.769
+Thank You friends thank you for watching
+
+179
+00:11:24.769 --> 00:11:29.029
+this video my next videos I will try to
+
+180
+00:11:29.029 --> 00:11:31.750
+explain another most important and
+
+181
+00:11:31.750 --> 00:11:37.480
+interesting concepts goodbye
+

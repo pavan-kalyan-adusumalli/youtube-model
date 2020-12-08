@@ -1,0 +1,184 @@
+{% extends 'videos/layout.html' %}
+{% block title %}Youtube | {{channelinfo.channelname}}{%endblock%}
+
+{%block body%}
+    <div id="channelcoverpic">
+        <img src="../../static/default.jpg" alt="default coverpic" width="90%">
+    </div>
+    <div id="channelinfo">
+        <img id="channelprofilepic" src="{{channelinfo.channelpicture.url}}" alt="{{extradata.picture}}">
+        &nbsp;&nbsp;
+        <div id="name_and_subs">
+            <h3 style="margin: none;">{{channelinfo.channelname}}</h3>
+            
+            <p>{{subscount}} subscribers</p>
+        </div>
+        <a href="{% url 'customize' channelinfo.id %}"><button id="subscribe" class="btn btn-danger">CUSTOMIZE</button></a> 
+        
+        <div id="channelnavbar" style="clear: both;">
+            <button class="navbtn btn btn-light" onclick="showdiv('channel_overview_videos')" id="homebtn" >Home</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('channel_videos')">Videos</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('playlists')">Playlists</button>
+            <button class="navbtn btn btn-light" onclick="showdiv('aboutchannel')">about</button>
+        </div>
+    </div>
+
+    <div id="channel_overview_videos" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto">
+        {% if playlists%}
+        <h5><b>Created playlists</b></h5>
+        <div class="overview_div"> 
+                    
+            {%for playlist in playlists%}
+            
+                {% if playlist.videoname.count >= 1%}
+                    <div class="profilevideos">
+                        
+                        <img style="margin-bottom: 4px;" src="{{playlist.videoname.all.0.thumbnail.url}}" alt="" width="200px"><br>
+                        <b>{{playlist.playlistname}}</b>
+                        <a href="{% url 'watchPlaylist' playlist.videoname.all.0.id playlist.id %}" style="text-decoration: none; color:black; float:right; margin-right:10px;"><i class="fa fa-play"></i></a>
+                        <a href="{% url 'showplaylist' playlist.id %}" style="display: block; color:black; text-decoration:none; margin-top:5px;">VIEW FULL PLAYLIST</a>
+                    </div>
+                {%endif%}
+
+            {%endfor%}
+        </div>
+        {%endif%}
+        <hr>
+        <h5><b>Uploads</b></h5>
+
+        <div class="overview_div">
+            {%for video in channelvideos%}
+            <div class="profilevideos">
+                
+                <a href="{% url 'watch' video.id %}" style="color:black; text-decoration:none;">
+                    <img style="margin-bottom: 4px; max-height:112.6px" src="{{video.thumbnail.url}}" alt="" width="200px"><br>
+                    <b>{{video.videoname}}</b>
+                </a>
+                <div class="dropleft" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background:transparent;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px;">{{video.views}} views • {{video.published_date}}</p>
+            </div>
+            {%empty%}
+
+            <div style="width: fit-content; margin:0 auto; text-align:center; padding:15%">
+                <img src="../../static/novideos.jpeg" alt="NoVideos">
+                <h3>Upload a video to get started</h3>
+                <p><small>Start showing your story and connecting with viewers. Videos that you upload will show up here.</small></p>
+                <a href="{% url 'addvideo' %}"><button id="uploadVideo" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">UPLOAD VIDEO</button> <br></a> 
+                <small>Learn more about <a href="">how to get started</a></small>
+            </div>
+            {%endfor%}
+
+        </div>
+    </div>
+<!--end of channel_overview-->
+
+<!--Channel videos division-->
+<div id="channel_videos" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    <h5><b>Uploads</b></h5>
+    <div id='container' style="margin-left:5%;">
+        {%for video in channelvideos%}
+            <div class="profilevideos">
+                <a href="{% url 'watch' video.id %}" style="color:black; text-decoration:none;">
+                <img style="margin-bottom: 4px; max-height:112.6px" src="{{video.thumbnail.url}}" alt="" width="200px"><br>
+                <b>{{video.videoname}}</b>
+                </a>
+                <div class="dropleft" style="float: right;">
+                    <i type="button" class="btn btn-light" style="background:transparent;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-ellipsis-v"></i>
+                    </i>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {%if request.user.is_authenticated %}
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                        <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                        {%endif%}
+                    </div>
+                </div>
+
+                <p style="margin-top: 5px;">{{video.views}} views • {{video.published_date}}</p>
+            </div>
+        
+        {%empty%}
+            <div style="width: fit-content; margin:0 auto; text-align:center; padding:15%">
+                <img src="../../static/novideos.jpeg" alt="NoVideos">
+                <h3>Upload a video to get started</h3>
+                <p><small>Start showing your story and connecting with viewers. Videos that you upload will show up here.</small></p>
+                <button id="uploadVideo" class="btn btn-info" style="background-color: #337ab7;" onclick="on(3)">UPLOAD VIDEO</button> <br>
+                <small>Learn more about <a href="">how to get started</a></small>
+            </div>
+        {%endfor%}
+    </div>
+</div>
+<!--end of channel videos division-->
+
+<!--start of playlists-->
+<div id="playlists" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    <h5><b>Created Playlists</b></h5>
+    <div id='container' style="margin-left:5%;">
+        {%for playlist in playlists%}
+            {% if playlist.videoname.count >= 1%}    
+                <div class="profilevideos" >
+                    <img style="margin-bottom: 4px;" src="{{playlist.videoname.all.0.thumbnail.url}}" alt="" width="200px"><br>
+                    <b>{{playlist.playlistname}}</b>
+                    <a href="{% url 'watchPlaylist' playlist.videoname.all.0.id playlist.id %}" style="text-decoration: none; color:black; float:right; margin-right:10px;"><i class="fa fa-play"></i></a>
+                    <a href="{% url 'showplaylist' playlist.id %}" style="display: block; color:black; text-decoration:none; margin-top:5px;">VIEW FULL PLAYLIST</a>
+                </div>
+            {%endif%}
+        {%empty%}
+            <div style="width: fit-content; margin:0 auto; text-align:center; padding:15%">
+                <img src="../../static/novideos.jpeg" alt="NoVideos">
+                <h3>Create a playlist</h3>
+                <p><small>Start showing your story and connecting with viewers. Playlists that you create will show up here.</small></p>
+                <small>Learn more about <a href="">how to get started</a></small>
+            </div>
+        {%endfor%}
+    </div>
+</div>
+<!--end of created playlists-->
+
+<!--about channel starts-->
+<div id="aboutchannel" class="profiledivisions" style="width: 85%; margin:0 6% 0 auto;">
+    {% if channelinfo.description %}
+        <div style="margin-left: 5%; float:left; vertical-align:top;">
+            <h4>Channel description</h4>
+            {{channelinfo.description}}
+        </div>
+    {%endif%}
+    <div style="margin-left:50%; width:fit-content; display:inline-block;">
+        <p>Stats</p>
+        <p>Joined {{channelinfo.date_created}}</p>
+        <p>{{totalviews}} views</p>
+    </div>
+</div><!--end of about-->    
+    <script>
+        function showdiv(divname){
+            document.querySelectorAll('.profiledivisions').forEach(divs =>{
+                divs.style.display = 'none';
+            })
+            document.querySelectorAll('.navbtn').forEach(btn =>{
+                btn.style.border = 'none';
+            })
+            document.querySelector(`#${divname}`).style.display = 'block';
+            document.addEventListener('click', ()=>{
+                const element = event.target;
+                if(element.className == 'navbtn btn btn-light')
+                    element.style.borderBottom = '1.5px solid grey';
+            })
+        }
+
+        document.addEventListener('DOMContentLoaded', ()=>{
+            showdiv('channel_overview_videos');
+            document.querySelector('#homebtn').style.borderBottom = '1.5px solid grey';            
+        })
+    </script>
+{%endblock%}

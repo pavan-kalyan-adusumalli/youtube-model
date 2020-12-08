@@ -1,0 +1,86 @@
+{% extends 'videos/layout.html' %}
+
+{% block title %}YouTube | history{%endblock%}
+
+{%block body%}
+    {% if user.is_authenticated %}
+    <h2 style="text-align: center;">Watch history</h2>
+    
+    
+    <div id="historyvideos">
+    {% for video in feed %}
+        <div class="historysuggestions" style="display: inline-block;">
+            <a href="{% url 'watch' video.id %}" style="margin-top: 25px; color:black">
+                
+                <img  src="{{video.thumbnail.url}}" alt="video">
+                   
+                <div style="display: inline-block; width:40%; margin-left:8px; text-align:left;">
+                    <h4>{{video.videoname}}</h4>
+                    <p style="opacity: 0.8;">{{video.uploadedchannel.channelname}} | {{video.views}} views</p>
+                    <p style="opacity: 0.8;">{{video.description|truncatechars:100}}</p>
+                </div>
+            </a>
+
+            <div class="dropleft" style="float: right; margin-right:5%;">
+                <i type="button" class="btn btn-light" style="background-color: transparent;" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v"></i>
+                </i>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {%if request.user.is_authenticated %}
+                    <button class="dropdown-item" data-videoid="{{video.id}}" onclick="removeFromHistory(this)">Remove from Watch history</button>
+                    <button class="dropdown-item" data-videoid="{{video.id}}" onclick='watchlater(this)' ><i class="fa fa-clock-o"></i>&nbsp;&nbsp;Save to Watch Later</button>
+                    <button class="dropdown-item" data-videoid="{{video.id}}" onclick="savetoplaylist(this)"><i class="fa fa-list"></i>&nbsp;&nbsp;Save to Playlist</button>
+                    {%endif%}
+                </div>
+            </div>
+
+        </div>
+            <br>
+    {%empty%}
+    </div>
+        <div style="text-align: center; margin:10% auto 0 auto; width:fit-content;">
+            <span style="font-size:90px;" class="fa fa-history"></span>
+            <h3>Keep track of what you watch</h3>
+            <small>This list has no videos. <br>
+            You may not viewed any videos yet or You may have cleared your watch history.</small><br><br>
+            <a href="{% url 'index' %}"><button class="btn btn-success" >Go to Home</button></a>
+        </div>
+    {%endfor%}
+<!--
+
+            <a href="{% url 'watch' 1 %}" style="margin-top: 25px; color:black">
+                <div class="suggestions" style="display: inline-block;">
+                    <img  src="../../static/Screenshot_467.png" alt="video">
+                   
+                    <div style="display: inline-block;width:40%; margin-left:8px;text-align:left;">
+                        <h4 style="font-weight: 500;">Making of suriya's 24 in poland scenes</h4>
+                        <p>ROYAL EXPRESS TV</p>
+                        <p>10 lakh views</p>
+                    </div>
+                </div></a>
+            <br>
+
+
+            <a href="{% url 'watch' 1 %}" style="margin-top: 25px; color:black">
+                <div class="suggestions" style="display: inline-block;">
+                    <img  src="../../static/Screenshot_467.png" alt="video">
+                   
+                    <div style="display: inline-block;width:40%; margin-left:8px;text-align:left;">
+                        <h4 style="font-weight: 500;">Making of suriya's 24 in poland scenes</h4>
+                        <p>ROYAL EXPRESS TV</p>
+                        <p>10 lakh views</p>
+                    </div>
+                </div></a>
+            <br>
+        </div>-->
+    {%else%}
+    <div style="text-align: center; margin:10% auto 0 auto; width:fit-content;">
+        <span style="font-size:90px;" class="fa fa-history"></span>
+        <h3>Keep track of what you watch</h3>
+        <small>Watch history isn't viewable when you're signed out.</small><br><br>
+        <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">
+        <button style="float: none;" id="signin" class="btn btn-info"><span class="fa fa-user-circle-o"></span>&nbsp;&nbsp;sign in</button>
+        </a>
+    </div>
+    {%endif%}
+{%endblock%}

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--Favicon-->
+        <link rel="icon" href="../../static/ytfavicon.webp" type="image/x-icon">
+        <title>{% block title %}{% endblock %}</title>
+        <!--bootstrap link-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!--font awesome icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../../static/style.css">
+        <script src="../../static/scripting.js"></script>
+        
+        <!-- JQUERY (First) -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+
+        <!-- BOOTSTRAP JS (Last) -->
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        
+        <!-- HANDLE BARS TEMPLATE-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+        <style>
+            #overlay1, #overlay2, #overlay3, #overlay4, #overlay5 {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 2;
+            cursor: pointer;
+            }
+    
+            #text{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /*font-size: 50px;*/
+            width: 40%;
+            transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            }
+        </style>
+
+        {% block head %}{%endblock%}
+{%verbatim%}
+
+        <script id="subhandlebar" type="text/x-handlebars-template">
+            <button id="subscribebtn" class="btn btn-danger" data-channelid="{{channelid}}" style="background-color:red" onclick="subscribeUser(this)">SUBSCRIBE</button>
+        </script>
+        <script id="unsubhandlebar" type="text/x-handlebars-template">
+            <button id="unsubscribebtn" class="btn btn-light" data-channelid="{{channelid}}" onclick="unsubscribe(this)">SUBSCRIBED</button>
+        </script>
+
+        <script id="resultHandlebar" type="text/x-handlebars-template">
+            <a class='relatedresults' onclick="setinput(this)" style="border-bottom: 0.5px solid rgb(230, 229, 229);" >{{name}}</a>
+        </script>
+        
+        <script id="choicehandlebar" type="text/x-handlebars-template">
+            <div style="margin: 15px 20px; font-size:16px;">
+                <input style="width:fit-content; display:inline-block;" type="checkbox" value="{{playlistid}}" name="playlists">&nbsp;&nbsp;&nbsp;&nbsp;{{playlistname}}
+            </div>
+        </script>
+{%endverbatim%}
+    </head>
+    <body style="background-color: white;">
+        <nav>
+            <div class="containter">
+                <button style="background-color: white; border:none; width:fit-content; display:inline-block;" onclick="show_hide()"><i class="fa fa-bars" style="font-size: 20px;"></i></button>
+                <a href="{% url 'index' %}"><img id="ytlogo" src="../../static/yt.jpg" alt="YouTube" style="width: 10%;"></a>
+                <a href="{% url 'index' %}"><img id="ytlogo2" src="../../static/ytplaybtn.jpg" alt="YouTube" style="width: 10%;"></a>
+                
+                <form id="search" action="{% url 'searchsomething' %}" method="POST">
+                    {% csrf_token %}
+                    <span id="searchandresults" class="searchelement" style="position:relative; display:inline-block;">
+                        <input id="searchinputfield" type="text" style="width: 100%; height:100%;" name="searchedtext"><br>
+                        <span id="relatedresultsdiv" style="position:absolute; width:100%; display:inline-block;  border:1px solid black; z-index:1;">
+                            <!--<a href="" class="relatedresults">1st link</a>
+                            <a href="" class="relatedresults">1st link</a>
+                            <a href="" class="relatedresults">1st link</a>-->
+                        </span>
+                    </span>
+                    <!--<input id="searchinputfield" type="text" class="searchelement" placeholder="Search">--><!--
+                --><button class="searchelement" style="width:13%; height:33px; color:rgb(80, 79, 79); background-color: rgb(235, 232, 232); border:1px solid rgb(196, 194, 194);" type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                
+                </form>
+                <!--<div id="relatedresultsdiv" style="position:absolute; display:float; left:21%; border:1px solid black; z-index:1001;">
+                    <p>related results</p>
+                    <p>anotehr result</p>
+                </div>-->
+
+                {% if user.is_authenticated %}
+                    <div class="dropleft" style="width: fit-content; float:right; margin-left:8px; margin-right:10px">
+                        <a class="" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src={{extradata.picture}} alt={{user}} width="30px" id="signin" style="border-radius: 50%;">
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            
+                            <div class="dropdown-item">
+                                <img src={{extradata.picture}} alt={{user}} width="35px" style="border-radius: 50%;">&nbsp;&nbsp;&nbsp;<strong>{{extradata.name}}</strong>
+                                
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            
+                            {% if userchannel %}
+                                <a href="{% url 'mychannel' %}" class="dropdown-item">Your channel</a>
+                                <a class="dropdown-item" href="{% url 'mychannel' %}"><i class="fa fa-play-circle"></i>&nbsp;&nbsp;&nbsp;Your videos</a>
+                                <a class="dropdown-item" href="{% url 'mychannel' %}"><i class="fa fa-list-ul"></i>&nbsp;&nbsp;&nbsp;Channel playlists</a>
+                            {%else%}
+                                <button class="dropdown-item" onclick="on(1)"><i class="fa fa-user"></i> Create a channel</button></a>
+                                <!--on(1) which, on click turn on overlay 1-->
+                            {%endif%}
+                            <!--<button class="dropdown-item" id="theme" onclick="changetheme()">Dark/White Theme&nbsp;&nbsp;&nbsp;<i class="fa fa-adjust"></i></button>-->
+                            
+                            <a class="dropdown-item" href="{% url 'watchlaterPlaylist' 'wl' %}"><i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;Watch later</a>
+                            <a class="dropdown-item" href="{% url 'watchlaterPlaylist' 'likedvideos' %}"><i class="fa fa-thumbs-o-up"></i>&nbsp;&nbsp;&nbsp;Liked videos</a>
+                            <form method="post" action="/accounts/logout/">
+                                {%csrf_token%}
+                                <button class="dropdown-item" type="submit"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;Sign Out</button>
+                            </form>
+                              
+ 
+                            
+                        </div>
+                    </div>
+                    <!--<img src={{extradata.picture}} alt={{user}} width="30px" id="signin" style="border-radius: 50%;">-->
+                {%else%}
+
+                    <a title="Google" class="socialaccount_provider google" href="/accounts/google/login/?process=login">
+                    <button id="signin" class="btn btn-info" ><span class="fa fa-user-circle-o"></span>&nbsp;&nbsp;sign in</button>
+                    </a>
+
+                {%endif%}
+                <a href="{% url 'addvideo' %}" style="float:right; width: 5%; margin-right:10px;background-color:white; width:fit-content; border-radius:50%"><img src="../../static/addvideo.webp" alt="+ video" width="30px"></a>
+                <!--<i class="fa fa-video-camera"></i>&nbsp;<i class="fa fa-plus"></i>-->
+            </div>
+        </nav><!--
+
+     -->{% block body %}{% endblock %}
+     <div id="sidebar">
+        <a href="{% url 'index' %}" id="about">Home<i class="fa fa-home"></i></a><br>
+        <a href="{% url 'subscriptions' %}" id="blog"><span style="font-size: 14px;">Subscriptions</span> <i class="fa fa-plus-square"></i></a><br>
+        <a href="{% url 'watchhistory' %}" id="projects">History<i class="fa fa-history"></i></a>
+        <a href="{% url 'watchlaterPlaylist' 'wl' %}" id="watchlater" ><span style="font-size: 15.5px;">Watch Later</span><i class="fa fa-clock-o"></i></a>
+        <a href="{% url 'watchlaterPlaylist' 'likedvideos' %}" id="likedvideos"><span style="font-size: 15px;">Liked videos</span><i class="fa fa-thumbs-up"></i></a>
+        <a href="{% url 'category' 'music'%}" id="music">Music<i class="fa fa-music"></i></a>
+        <a href="{% url 'category' 'science and technology'%}" id="sports" style="color: black;"><span style="font-size: 16px;">Technology</span><i class="fa fa-desktop"></i></a>
+        <a href="{% url 'category' 'gaming'%}" id="gaming">Gaming <i class="fa fa-gamepad"></i></a>
+        <a href="{% url 'category' 'films and animation'%}" id="film">Films <i class="fa fa-film"></i></a>
+        
+    </div>
+
+
+    <div id="overlay1" onclick="off(1)">
+        <div id="text">
+            <div id="getstarted" style="background-color: white; width:fit-content; text-align:center;">
+                <img src="../../static/creatorjourney.jpeg" alt="" width="90%" style="background-position: center;">
+                <h4>Your creater journey begins</h4>
+                <small><p style="padding: 0 5%;">Pursuing your creative passions, connecting with people around the world and sharing your stories begin with creating yout channel</p></small>
+                <button onclick="chooseName()" style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase;">get started</button><br>
+                <button style="background-color: white; color:blue; padding:5px; font-size:10px; font-weight:550; border:none;">NO, THANKS</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="overlay2">
+        <div id="text">
+            <div id="choosename" style="overflow-y:auto; max-height:470px; background-color: white; width:fit-content; text-align:center;">
+                <br>
+                <h3>Choose how to create your channel</h3>
+                <div id="container" style="text-align: center;">
+                    <div style="width: 50%; min-width:226px; padding:20px;">
+                        <h5><b>Use your name</b></h5>
+                        <p>Create a channel using name and picture on your Google Account.</p><br>
+                        <img src="{{extradata.picture}}" alt="" width="30%" style="border-radius: 50%;"> <br>
+                        <strong style="display:inline-block; margin-top: 10px;">{{extradata.name}}</strong>
+                        <small><p>By selecting this option you agree to<br>
+                        <a href="https://www.youtube.com/t/terms">YouTube's terms of service.</a></p></small>
+                        <a href="{% url 'channelsetup' %}">
+                            <button style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase;">select</button><br>
+                        </a>
+                    </div>
+
+                    <div style="width: 50%; min-width:226px; padding:20px">
+                        <h5><b>Use a custom name</b></h5>
+                        <p>create a channel using brand or other name and picture.</p>
+                        <img src="../../static/customname.jpeg" alt="customname" width="90%">
+                        <a href="{% url 'createchannel' %}">
+                            <button style="background-color: blue; color:white; padding:5px; font-size:10px; font-weight:550; text-transform:uppercase; margin-top:22px">select</button><br>
+                        </a>
+                    </div>
+
+                    <p style="font-size:10px; padding:0 20px 0 20px;">As a reminder, we may share non-personally identifiable information related to your channel and/or videos with our partners, including advertisers and rights holders</p>
+                    
+                    <button style="margin:0 auto 10px auto; background-color:white; border:none;" onclick="off(2)">cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<div id="overlay5"><div id="panim">Playlist Created successfully!</div>
+    <div id="text" style="width: 20%;"><!--override some properties of #text-->
+        <div id="" style="background-color:white; color:black; text-align:left; min-width:188px;">
+            <h4 style="display: inline-block; margin-left:10px;">Save to... <small style="color: white;" id="curchannelid">{{userchannel.id}}</small></h4>
+            <button class="btn btn-light close" style="margin: 10px 10px 0 0;" onclick="off(5)"><i class="fa fa-times"></i></button>
+            <hr style="margin-top: 0;">
+            <div id="choices">
+                <form action="{% url 'savetoplaylists' %}" method='POST'>
+                    {%csrf_token%}
+                    <div id="playlistOptions">
+                    {% for playlist in userplaylists %}
+                        <div style="margin: 15px 20px; font-size:16px;">
+                            <input style="width:fit-content; display:inline-block;" type="checkbox" value="{{playlist.id}}" name="playlists">&nbsp;&nbsp;&nbsp;&nbsp;{{playlist.playlistname}}
+                        </div>
+                    {%empty%}
+                        <div style="margin: 15px 20px; font-size:16px;">
+                            You have no playlists create one
+                        </div>
+                    {%endfor%}
+                    </div>
+                <input id="videoid" style="color: white;" value="" name="videoid" hidden>
+                <button class="btn btn-light" style="background-color: white; margin-left:60%;">SAVE</button>
+                </form>
+            </div>
+            <hr>
+
+            <div class="dropdown">
+                <button style="background-color: white; margin: auto auto 15px 30px;" class="btn btn-light" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Create Playlist
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  
+                    <input id="playlistname" style="margin: 5px; width:80%;" class="form-control" type="text" class="dropdown-item" placeholder="Enter Playlist name">
+                    <div style="margin-top: 5px;" class="dropdown-item">Private&nbsp;&nbsp;<input id="cbox" type="checkbox"></div>
+                    <button onclick="createNewPlaylist()" id="createPlaylist" class="btn btn-light dropdown-item" style="color: #337ab7; width:50%; margin-left:45%;">CREATE</button>
+        
+                </div>
+            </div>
+
+
+        </div>
+    </div>    
+</div>
+
+<div id="anim">namaste</div>
+
+        <script>
+            //displaying choosename form
+            function chooseName(){
+                document.querySelector('#overlay1').style.display = 'none';
+                document.querySelector('#overlay2').style.display = 'block';
+            }
+            //script for overlay
+            function on(overlayNum){
+                document.querySelector(`#overlay${overlayNum}`).style.display = 'block';
+            }
+            function off(overlayNum, reload=false){
+                document.querySelector(`#overlay${overlayNum}`).style.display = 'none';
+                if(reload == true)
+                    location.reload();
+                //document.querySelector('#overlay2').style.display = 'none';
+            }
+            function offall(overlayNum){
+                for(let i=1; i<=overlayNum; i++)
+                    document.querySelector(`#overlay${i}`).style.display = 'none';
+            }
+
+            function show_hide(){
+                const el = document.querySelector('#sidebar');
+                const state =window.getComputedStyle(el, null).getPropertyValue("display");
+                //alert(state);
+                
+                if(state == 'inline-block'){
+                    document.querySelector('#sidebar').style.display = 'none';
+                    //console.log(document.querySelector('#videos').width)
+                    //document.querySelector('#videos').width = '100%';
+                }
+                else{
+                    document.querySelector('#sidebar').style.display = 'inline-block';
+                    //document.querySelector('#videos').style.width = '84%';
+                }
+            }
+
+            function changetheme(){
+                const body = document.body;
+                if(body.style.backgroundColor == 'white' || body.style.backgroundColor == null){
+                    body.style.backgroundColor='#000000';
+                    document.querySelector('#ytlogo').src = "../../static/ytdark.jpeg";
+                    document.querySelector('#videos').style.backgroundColor = '#302b2b';
+                    document.querySelectorAll('.details').forEach(ele =>{
+                        ele.style.color = 'white'; 
+                    });
+                }
+                else{
+                    body.style.backgroundColor='white';
+                    document.querySelector('#ytlogo').src = "../../static/yt.jpg";
+                    document.querySelector('#videos').style.backgroundColor = 'rgb(241, 240, 240);';
+                }
+            }
+        </script>
+    </body>
+</html>
