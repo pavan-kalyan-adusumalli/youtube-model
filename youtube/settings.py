@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')srm^mo&err(uk@84%xit)(#!+=-m!u=&zkp36ur+m)!a=tk-p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['youtube-model.herokuapp.com' ,'127.0.0.1']
 
